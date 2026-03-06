@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garantido - Vermelhou Geral</title>
+    <style>
+        :root {
+            --vermelho: #ed1c24;
+            --branco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--branco);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Para os corações não criarem barra de rolagem */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Fundo de Corações */
+        .heart {
+            position: absolute;
+            color: var(--vermelho);
+            font-size: 20px;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 0;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* Layout Principal */
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 1200px;
+            z-index: 10;
+        }
+
+        .side-photo {
+            width: 250px;
+            height: 350px;
+            border: 5px solid var(--vermelho);
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .center-content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--vermelho);
+            width: 400px;
+        }
+
+        .album-cover {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #playBtn {
+            background-color: var(--vermelho);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-bottom: 20px;
+        }
+
+        #playBtn:hover {
+            transform: scale(1.1);
+            background-color: #c41217;
+        }
+
+        /* Letras sincronizadas */
+        #lyrics-container {
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .lyric-line {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 10px 0;
+            transition: all 0.3s;
+            opacity: 0.3;
+        }
+
+        .lyric-line.active {
+            color: var(--vermelho);
+            opacity: 1;
+            font-weight: bold;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Corações serão gerados via JS -->
+
+    <div class="container">
+        <!-- Primeira Foto -->
+        <img src="URL_DA_SUA_FOTO_1" alt="Foto 1" class="side-photo">
+
+        <!-- Centro: Player e Letra -->
+        <div class="center-content">
+            <img src="URL_DA_FOTO_ALBUM" alt="Capa Album" class="album-cover">
+            <br>
+            <button id="playBtn">Tocar Vermelhou Geral ❤️</button>
+            
+            <div id="lyrics-container">
+                <div id="lyrics-content">
+                    <!-- Letras aparecerão aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Segunda Foto -->
+        <img src="URL_DA_SUA_FOTO_2" alt="Foto 2" class="side-photo">
+    </div>
+
+    <!-- Elemento de Áudio -->
+    <audio id="musica">
+        <source src="URL_DA_MUSICA_VERMELHOU_GERAL.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('musica');
+        const playBtn = document.getElementById('playBtn');
+        const lyricsContent = document.getElementById('lyrics-content');
+
+        // Letra sincronizada (tempo em segundos e texto)
+        // Você pode ajustar os tempos conforme a versão da música que tiver
+        const lyricsData = [
+            { time: 0, text: "O maior amor do mundo és tu..." },
+            { time: 4, text: "A paixão da minha vida és tu..." },
+            { time: 8, text: "Meu amor, VERMELHOU!" },
+            { time: 13, text: "O calor que me aquece és tu..." },
+            { time: 17, text: "Essa luz que me ilumina és tu..." },
+            { time: 21, text: "Meu amor, VERMELHOU!" },
+            { time: 26, text: "Quem me faz seguir em frente és tu..." },
+            { time: 31, text: "Quem me dá força e coragem és tu..." },
+            { time: 35, text: "VERMELHOU GERAL!" }
+        ];
+
+        // Criar elementos da letra
+        lyricsData.forEach((line, index) => {
+            const p = document.createElement('p');
+            p.innerText = line.text;
+            p.classList.add('lyric-line');
+            p.id = `line-${index}`;
+            lyricsContent.appendChild(p);
+        });
+
+        // Lógica do botão Play
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "Pausar ⏸️";
+                startHearts();
+            } else {
+                audio.pause();
+                playBtn.innerText = "Tocar Vermelhou Geral ❤️";
+                stopHearts();
+            }
+        });
+
+        // Sincronização da letra
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = audio.currentTime;
+            
+            lyricsData.forEach((line, index) => {
+                if (currentTime >= line.time) {
+                    // Remove destaque de todos
+                    document.querySelectorAll('.lyric-line').forEach(el => el.classList.remove('active'));
+                    // Adiciona destaque à linha atual
+                    const activeLine = document.getElementById(`line-${index}`);
+                    activeLine.classList.add('active');
+                    
+                    // Rolagem suave
+                    lyricsContent.style.transform = `translateY(-${index * 40}px)`;
+                }
+            });
+        });
+
+        // Efeito de Coraçõezinhos caindo
+        let heartInterval;
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        function startHearts() {
+            heartInterval = setInterval(createHeart, 300);
+        }
+
+        function stopHearts() {
+            clearInterval(heartInterval);
+        }
+    </script>
+</body>
+</html>
