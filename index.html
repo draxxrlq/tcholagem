@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>oia</title>
+    <title>Vermelhou Geral - Garantido</title>
     <style>
         :root {
             --vermelho: #ed1c24;
@@ -13,24 +13,24 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--branco);
+            background-color: var(--vermelho); /* Fundo todo vermelho */
             font-family: 'Arial', sans-serif;
-            overflow: hidden; /* Para os corações não criarem barra de rolagem */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
-        /* Fundo de Corações */
+        /* Fundo de Corações Brancos para contrastar com o vermelho */
         .heart {
             position: absolute;
-            color: var(--vermelho);
+            color: var(--branco);
             font-size: 20px;
             user-select: none;
             pointer-events: none;
             animation: fall linear forwards;
-            z-index: 0;
+            z-index: 1;
         }
 
         @keyframes fall {
@@ -43,192 +43,121 @@
         .container {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            width: 90%;
-            max-width: 1200px;
+            justify-content: center;
+            gap: 50px;
+            width: 95%;
             z-index: 10;
         }
 
+        /* Imagens Laterais */
         .side-photo {
-            width: 250px;
-            height: 350px;
-            border: 5px solid var(--vermelho);
-            border-radius: 15px;
-            object-fit: cover;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 300px; /* Limite para não ocupar a tela toda */
+            height: auto;
+            border: none; /* Sem bordas */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: float 4s ease-in-out infinite; /* Efeito flutuante */
         }
 
+        /* Foto da esquerda flutua em tempo diferente da direita */
+        .photo-1 { animation-delay: 0s; }
+        .photo-2 { animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Centro: Spotify e Letra */
         .center-content {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 20px;
-            border: 3px solid var(--vermelho);
             width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .album-cover {
-            width: 200px;
-            height: 200px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        #playBtn {
-            background-color: var(--vermelho);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            margin-bottom: 20px;
-        }
-
-        #playBtn:hover {
-            transform: scale(1.1);
-            background-color: #c41217;
-        }
-
-        /* Letras sincronizadas */
-        #lyrics-container {
-            height: 100px;
-            overflow: hidden;
-            position: relative;
-            margin-top: 20px;
-        }
-
-        .lyric-line {
+        /* Container da Letra */
+        .lyrics-box {
+            color: var(--branco);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            height: 150px;
+            overflow-y: auto;
             font-size: 1.1rem;
-            color: #333;
-            margin: 10px 0;
-            transition: all 0.3s;
-            opacity: 0.3;
+            line-height: 1.6;
+            scrollbar-width: thin;
         }
 
-        .lyric-line.active {
-            color: var(--vermelho);
-            opacity: 1;
-            font-weight: bold;
-            transform: scale(1.1);
+        /* Esconder scrollbar em navegadores chrome/safari */
+        .lyrics-box::-webkit-scrollbar {
+            width: 5px;
+        }
+        .lyrics-box::-webkit-scrollbar-thumb {
+            background: var(--branco);
+            border-radius: 10px;
+        }
+
+        iframe {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- Corações serão gerados via JS -->
+    <!-- Os corações são gerados pelo JavaScript -->
 
     <div class="container">
         <!-- Primeira Foto -->
-        <img src="img/1.jpeg" alt="Foto 1" class="side-photo">
+        <img src="img/1.jpeg" alt="Foto 1" class="side-photo photo-1">
 
-        <!-- Centro: Player e Letra -->
+        <!-- Centro: Player Spotify e Letra -->
         <div class="center-content">
-            <img src="img/3.jpeg" alt="Capa Album" class="album-cover">
-            <br>
-            <button id="playBtn">tocar</button>
             
-            <div id="lyrics-container">
-                <div id="lyrics-content">
-                    <!-- Letras aparecerão aqui -->
-                </div>
+            <!-- Player do Spotify -->
+            <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5vGfa9QqvmGGn3bGa47t7x?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+            <!-- Letra da Música -->
+            <div class="lyrics-box">
+                O maior amor do mundo és tu...<br>
+                A paixão da minha vida és tu...<br>
+                Meu amor, VERMELHOU!<br>
+                O calor que me aquece és tu...<br>
+                Essa luz que me ilumina és tu...<br>
+                Meu amor, VERMELHOU!<br>
+                Quem me faz seguir em frente és tu...<br>
+                Quem me dá força e coragem és tu...<br>
+                A minha felicidade és tu...<br>
+                Meu amor, VERMELHOU!
             </div>
         </div>
 
         <!-- Segunda Foto -->
-        <img src="img/2.jpeg" alt="Foto 2" class="side-photo">
+        <img src="img/2.jpeg" alt="Foto 2" class="side-photo photo-2">
     </div>
 
-    <!-- Elemento de Áudio -->
-    <audio id="musica">
-        <source src="vermelhou geral.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        const audio = document.getElementById('musica');
-        const playBtn = document.getElementById('playBtn');
-        const lyricsContent = document.getElementById('lyrics-content');
-
-        // Letra sincronizada (tempo em segundos e texto)
-        // Você pode ajustar os tempos conforme a versão da música que tiver
-        const lyricsData = [
-            { time: 0, text: "O maior amor do mundo és tu..." },
-            { time: 4, text: "A paixão da minha vida és tu..." },
-            { time: 8, text: "Meu amor, VERMELHOU!" },
-            { time: 13, text: "O calor que me aquece és tu..." },
-            { time: 17, text: "Essa luz que me ilumina és tu..." },
-            { time: 21, text: "Meu amor, VERMELHOU!" },
-            { time: 26, text: "Quem me faz seguir em frente és tu..." },
-            { time: 31, text: "Quem me dá força e coragem és tu..." },
-            { time: 35, text: "VERMELHOU GERAL!" }
-        ];
-
-        // Criar elementos da letra
-        lyricsData.forEach((line, index) => {
-            const p = document.createElement('p');
-            p.innerText = line.text;
-            p.classList.add('lyric-line');
-            p.id = `line-${index}`;
-            lyricsContent.appendChild(p);
-        });
-
-        // Lógica do botão Play
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playBtn.innerText = "Pausar ⏸️";
-                startHearts();
-            } else {
-                audio.pause();
-                playBtn.innerText = "Tocar Vermelhou Geral ❤️";
-                stopHearts();
-            }
-        });
-
-        // Sincronização da letra
-        audio.addEventListener('timeupdate', () => {
-            const currentTime = audio.currentTime;
-            
-            lyricsData.forEach((line, index) => {
-                if (currentTime >= line.time) {
-                    // Remove destaque de todos
-                    document.querySelectorAll('.lyric-line').forEach(el => el.classList.remove('active'));
-                    // Adiciona destaque à linha atual
-                    const activeLine = document.getElementById(`line-${index}`);
-                    activeLine.classList.add('active');
-                    
-                    // Rolagem suave
-                    lyricsContent.style.transform = `translateY(-${index * 40}px)`;
-                }
-            });
-        });
-
-        // Efeito de Coraçõezinhos caindo
-        let heartInterval;
+        // Gerador de corações contínuo
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-5vh';
             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
             heart.style.opacity = Math.random();
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            
             document.body.appendChild(heart);
 
+            // Remove o coração após a animação para não pesar o site
             setTimeout(() => {
                 heart.remove();
             }, 5000);
         }
 
-        function startHearts() {
-            heartInterval = setInterval(createHeart, 300);
-        }
-
-        function stopHearts() {
-            clearInterval(heartInterval);
-        }
+        // Inicia a chuva de corações automaticamente
+        setInterval(createHeart, 300);
     </script>
 </body>
 </html>
